@@ -517,6 +517,7 @@ else:
                             min(1., max(-1., ev_value / 1000.)),
                             invert_y, 'yx')
                     elif ev_code == 8: # Wheel
+                        # translates the wheel move to a button
                         b= "scrollup" if ev_value < 0 else "scrolldown"
                         if 'button' not in point:
                             point['button'] = b
@@ -582,8 +583,11 @@ else:
                             dispatch_queue.append(('key_up', (
                                 Keyboard.keycodes[z.lower()], ev_code,
                                 keys_str.get(z, z), Window._modifiers)))
-                            if z == 'shift':
-                                Window._modifiers.remove('shift')
+                            if z == 'shift' or z == 'alt':
+                                Window._modifiers.remove(z)
+                            elif z.endswith('ctrl'):
+                                Window._modifiers.remove('ctrl')
+
 
             def process(points):
                 if not is_multitouch:
